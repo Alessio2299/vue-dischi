@@ -2,7 +2,9 @@
   <div>
     <div class="card">
         <img :src="album.poster" :alt="album.title">
-        <h1></h1>
+        <h3>{{album.title}}</h3>
+        <h5>{{album.author}}</h5>
+        <span>{{album.year}}</span>
     </div>
   </div>
 </template>
@@ -22,7 +24,10 @@ export default {
     height: 200px;
     border-radius: 50%;
     position: relative;
-    margin-bottom: 80px;
+    margin-bottom: 100px;
+    text-align: center;
+    color: #fff;
+    line-height: 25px;
     img{
       width: 100%;
       height: 100%;
