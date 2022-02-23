@@ -1,8 +1,6 @@
 <template>
   <main>
-    <div class="loading" v-if="listAlbum.length < 10">
-      <span>Caricamento</span>
-    </div>
+    <LoadingMain  v-if="listAlbum.length < 10" :text="textLoading"/>
     <div class="container" v-if="listAlbum.length == 10">
       <DiskMain v-for="(album, index) in listAlbum" :key="(index)" :album="album"/>
     </div>
@@ -11,17 +9,22 @@
 
 <script>
   import DiskMain from "./DiskMain.vue";
+  import LoadingMain from "./LoadingMain.vue";
 
   const axios = require('axios');
   export default {
     name: "MainPage",
     data(){
       return{
-        listAlbum: []
+        listAlbum: [],
+        text: "loading...",
+        textLoading: "",
+        loading: null
       }
     },
     components: {
       DiskMain,
+      LoadingMain
     },
     methods:{
       getAlbum(){
@@ -30,10 +33,22 @@
           this.listAlbum = response.data.response;
           console.log(this.listAlbum)
         })
+      },
+      singleLetter(){
+          let i = 0;
+        this.loading = setInterval(() => {
+          this.textLoading += this.text[i];
+          i++;
+          if(this.textLoading.length == this.text.length){
+            this.textLoading = "";
+            i = 0;
+          }
+        },500)
       }
     },
     mounted(){
       this.getAlbum();
+      this.singleLetter();
     }
   }
 </script>

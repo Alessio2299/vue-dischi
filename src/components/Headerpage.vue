@@ -1,6 +1,6 @@
 <template>
   <header>
-    <img src="../assets/img/logo-small.svg" alt="Logo Spotify">
+    <img src="../assets/img/logo-spotify.png" alt="Logo Spotify">
   </header>
 </template>
 
