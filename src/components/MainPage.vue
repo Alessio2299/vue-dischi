@@ -18,6 +18,7 @@
       return{
         listAlbum: [],
         genres: [],
+        authors: [],
         text: "loading...",
         textLoading: "",
         loading: null,
@@ -25,17 +26,26 @@
       }
     },
     props:{
-      value: String
+      value: String,
+      valueAuthor: String
     },
     computed:{
       listAlbumFiltered(){
-      if(this.value == "All"){
-        return this.listAlbum
-      }else{
-        return this.listAlbum.filter(album =>{
-          return album.genre.includes(this.value)
-        });
-      }
+        if((this.value == "All") && (this.valueAuthor == "All")){
+          return this.listAlbum;
+        }else if(this.value == "All"){
+          return this.listAlbum.filter(album =>{
+            return (album.author.includes(this.valueAuthor));
+          });
+        }else if(this.valueAuthor == "All"){
+           return this.listAlbum.filter(album =>{
+            return (album.genre.includes(this.value));
+          });
+        }else{
+          return this.listAlbum.filter(album =>{
+            return ((album.author.includes(this.valueAuthor)) && (album.genre.includes(this.value)));
+          });
+        }
       }
     },
     components: {
@@ -48,7 +58,10 @@
         .then((response) => {
           this.listAlbum = response.data.response;
           this.loadInProgress = false;
-          this.addGenre();
+          for(let i = 0; i < this.listAlbum.length; i++){
+            this.addGenre(this.genres,this.listAlbum[i].genre, "genre");
+            this.addGenre(this.authors,this.listAlbum[i].author, "author");
+          }
         })
       },
       singleLetter(){
@@ -62,14 +75,14 @@
           }
         },200)
       },
-      addGenre(){
+      addGenre(array, object, emitName){
         for(let i = 0; i < this.listAlbum.length; i++){
-          if(!this.genres.includes(this.listAlbum[i].genre)){
-          this.genres.push(this.listAlbum[i].genre)
+          if(!array.includes(object)){
+          array.push(object)
           }
         }
-        this.$emit("genre", this.genres);
-      },
+        this.$emit(emitName, array);
+      }
     },
     mounted(){
       this.getAlbum();
@@ -86,7 +99,7 @@
     }
     .container{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 25px;
     width: 80%;
     flex-wrap: wrap;

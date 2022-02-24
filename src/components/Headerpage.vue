@@ -1,10 +1,16 @@
 <template>
   <header>
     <img src="../assets/img/logo-spotify.png" alt="Logo Spotify">
-    <select @change="changedValue" name="genre" v-model="valueOption" id="genreMusic">
-      <option value="All">All</option>
-      <option v-for="(option,index) in options" :key="index" :value="option">{{option}}</option>
-    </select>
+    <div>
+      <select @change="changedValueGenre" name="genre" v-model="valueOptionGenre" id="genreMusic">
+        <option value="All">All</option>
+        <option v-for="(option,index) in options" :key="index" :value="option">{{option}}</option>
+      </select>
+      <select @change="changedValueAuthor" name="author" v-model="valueOptionAuthor" id="genreMusic">
+        <option value="All">All</option>
+        <option v-for="(option,index) in optionsAuthor" :key="index" :value="option">{{option}}</option>
+      </select>
+    </div>
   </header>
 </template>
 
@@ -12,16 +18,21 @@
 export default {
   name: 'HeaderPage',
   props: {
-    options: Array
+    options: Array,
+    optionsAuthor: Array
   },
   data(){
     return{
-      valueOption: "All",
+      valueOptionGenre: "All",
+      valueOptionAuthor: "All"
     }
   },
   methods:{
-    changedValue(){
-      this.$emit("changedGenre", this.valueOption)
+    changedValueGenre(){
+      this.$emit("changedGenre", this.valueOptionGenre);
+    },
+    changedValueAuthor(){
+      this.$emit("changedAuthor",this.valueOptionAuthor);
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <HeaderPage @changedGenre="search" :options="genreList"/>
-    <MainPage @genre="optionGenre" :value="valueOption"/>
+    <HeaderPage @changedGenre="searchGenre" @changedAuthor="searchAuthor" :options="genreList" :optionsAuthor="authorList" />
+    <MainPage @genre="optionGenre" @author="optionAuthor" :value="valueOption" :valueAuthor="valueOptionAuthor"/>
   </div>
 </template>
 
@@ -14,7 +14,9 @@ export default {
   data(){
     return{
       genreList: [],
-      valueOption: "All"
+      authorList: [],
+      valueOption: "All",
+      valueOptionAuthor: "All"
     }
   },
   components: {
@@ -23,10 +25,16 @@ export default {
   },
   methods: {
     optionGenre(genre){
-      this.genreList = genre
+      this.genreList = genre;
     },
-    search(value){
-      this.valueOption = value
+    optionAuthor(author){
+      this.authorList = author;
+    },
+    searchGenre(value){
+      this.valueOption = value;
+    },
+    searchAuthor(value){
+      this.valueOptionAuthor = value;
     }
   }
 }
