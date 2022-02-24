@@ -1,8 +1,8 @@
 <template>
   <main>
-    <LoadingMain  v-if="listAlbum.length < 10" :text="textLoading"/>
-    <div class="container" v-if="listAlbum.length == 10">
-      <DiskMain v-for="(album, index) in listAlbum" :key="(index)" :album="album"/>
+    <LoadingMain  v-if="loadInProgress" :text="textLoading"/>
+    <div class="container">
+      <DiskMain v-for="(album, index) in listAlbumFiltered" :key="(index)" :album="album"/>
     </div>
   </main>
 </template>
@@ -17,9 +17,25 @@
     data(){
       return{
         listAlbum: [],
+        genres: [],
         text: "loading...",
         textLoading: "",
-        loading: null
+        loading: null,
+        loadInProgress : true,
+      }
+    },
+    props:{
+      value: String
+    },
+    computed:{
+      listAlbumFiltered(){
+      if(this.value == "All"){
+        return this.listAlbum
+      }else{
+        return this.listAlbum.filter(album =>{
+          return album.genre.includes(this.value)
+        });
+      }
       }
     },
     components: {
@@ -31,11 +47,12 @@
         axios.get('https://flynn.boolean.careers/exercises/api/array/music')
         .then((response) => {
           this.listAlbum = response.data.response;
-          console.log(this.listAlbum)
+          this.loadInProgress = false;
+          this.addGenre();
         })
       },
       singleLetter(){
-          let i = 0;
+        let i = 0;
         this.loading = setInterval(() => {
           this.textLoading += this.text[i];
           i++;
@@ -43,8 +60,16 @@
             this.textLoading = "";
             i = 0;
           }
-        },500)
-      }
+        },200)
+      },
+      addGenre(){
+        for(let i = 0; i < this.listAlbum.length; i++){
+          if(!this.genres.includes(this.listAlbum[i].genre)){
+          this.genres.push(this.listAlbum[i].genre)
+          }
+        }
+        this.$emit("genre", this.genres);
+      },
     },
     mounted(){
       this.getAlbum();
