@@ -30,6 +30,7 @@ export default {
       font-size: 30px;
       padding-left: 20px;
       color: #fff;
+      width: 100px;
     }
     .gray{
       animation: right 3s linear infinite;

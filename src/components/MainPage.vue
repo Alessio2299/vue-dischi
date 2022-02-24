@@ -1,7 +1,7 @@
 <template>
   <main>
     <LoadingMain  v-if="loadInProgress" :text="textLoading"/>
-    <div class="container">
+    <div class="container" v-if="loadInProgress == false">
       <DiskMain v-for="(album, index) in listAlbumFiltered" :key="(index)" :album="album"/>
     </div>
   </main>
@@ -47,7 +47,7 @@
         axios.get('https://flynn.boolean.careers/exercises/api/array/music')
         .then((response) => {
           this.listAlbum = response.data.response;
-          this.loadInProgress = false;
+          this.loadInProgress = true;
           this.addGenre();
         })
       },
@@ -79,15 +79,15 @@
 </script>
 <style lang="scss" scoped>
   main{
-    background-color: rgb(30, 45, 59);
-    height: calc(100vh - 84px);
+   height: 100vh;
     .loading{
       text-align: center;
       padding: 80px 0;
     }
     .container{
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 25px;
     width: 80%;
     flex-wrap: wrap;
     margin: 0 auto;
